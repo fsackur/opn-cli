@@ -1,6 +1,7 @@
 from opnsense_cli.code_generators.opn_cli.base import CommandCodeGenerator
-from opnsense_cli.code_generators.opn_cli.factory_types import ClickOptionCodeFragment
+from opnsense_cli.code_generators.opn_cli.factory_types import ClickOptionCodeFragment, ClickText
 from opnsense_cli.code_generators.opn_cli.command.template_vars import CommandTemplateVars
+from opnsense_cli.factories import FactoryException
 
 
 class ClickCommandCodeGenerator(CommandCodeGenerator):
@@ -32,7 +33,12 @@ class ClickCommandCodeGenerator(CommandCodeGenerator):
 
             column_names.append(tag.name)
 
-            click_option_type: ClickOptionCodeFragment = self._click_option_factory.get_type_for_data(tag)
+
+            click_option_type: ClickOptionCodeFragment
+            try:
+                click_option_type = self._click_option_factory.get_type_for_data(tag)
+            except FactoryException:
+                click_option_type = ClickText(tag)
             click_option_type.help = self._help_messages.get(tag.name, None)
 
             create_option_code = self._get_click_option_create_code(tag, click_option_type)

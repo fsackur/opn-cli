@@ -26,6 +26,7 @@ class ClickOptionCodeTypeFactory(ObjectTypeFromDataFactory):
         "JsonKeyValueStoreField": ClickText,
         ".\\UnboundDomainField": ClickText,
         ".\\UnboundServerField": ClickText,
+        "DescriptionField": ClickText,
     }
 
     def _get_class(self, key) -> ClickOptionCodeFragment:
