@@ -14,6 +14,8 @@ def get_methods(cls: Type) -> List[Tuple[str, Callable]]:
         if name not in ("__init__", "_api_call")
     ]
 
+def get_parameters():
+    return None
 
 class CommandCodeGenerator(CodeGenerator):
     def __init__(

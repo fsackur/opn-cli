@@ -29,7 +29,11 @@ def {{ vars.click_command }}(ctx, api_client: ApiClient, **kwargs):
     ctx.obj = {{ service_facade }}({{ param_name }})
 
 
+{% for name, _ in vars.get_methods(vars.controller) %}
 @{{ vars.click_command }}.command()
+{% for option in vars.click_options_create -%}
+    {{ option }}
+{% endfor %}
 @click.option(
     '--output', '-o',
     help='Specifies the Output format.',
@@ -47,62 +51,43 @@ def {{ vars.click_command }}(ctx, api_client: ApiClient, **kwargs):
     show_default=True,
 )
 @pass_{{ service }}
-def list({{ service }}: {{ service_facade }}, **kwargs):
+def {{ name }}({{ service }}: {{ service_facade }}, **kwargs):
     """
     Show all {{ vars.click_command }}
     """
-    result = {{ service }}.list_{{ vars.click_command }}s()
+
+    json_payload = {
+        '{{ vars.click_command }}': {}
+    }
+    options = {{ vars.column_list }}
+    for option in options:
+        if kwargs[option.lower()] is not None:
+            json_payload['{{ vars.click_command }}'][option] = kwargs[option.lower()]
+
+    json_payload = {
+        '{{ vars.click_command }}': {
+            {% for column in vars.column_names -%}
+                "{{ column }}": kwargs['{{ column.lower() }}'],
+            {% endfor %}
+        }
+    }
+
+    result = {{ service }}.{{ name }}(json_payload)
 
     CliOutputFormatter(result, kwargs['output'], kwargs['cols'].split(",")).echo()
+{% endfor %}
 
 
-@{{ vars.click_command }}.command()
-@click.argument('uuid')
-@click.option(
-    '--output', '-o',
-    help='Specifies the Output format.',
-    default="table",
-    type=click.Choice(available_formats()),
-    callback=formatter_from_formatter_name,
-    show_default=True,
-)
-@click.option(
-    '--cols', '-c',
-    help='Which columns should be printed? Pass empty string (-c '') to show all columns',
-    default=(
-        "{{ ",".join(vars.column_names) }}"
-    ),
-    show_default=True,
-)
-@pass_{{ service }}
+#---
+
+
 def show({{ service }}: {{ service_facade }}, **kwargs):
     """
     Show details for {{ vars.click_command }}
     """
     result = {{ service }}.show_{{ vars.click_command }}(kwargs['uuid'])
 
-    CliOutputFormatter(result, kwargs['output'], kwargs['cols'].split(",")).echo()
 
-
-@{{ vars.click_command }}.command()
-{% for option in vars.click_options_create -%}
-    {{ option }}
-{% endfor %}
-@click.option(
-    '--output', '-o',
-    help='Specifies the Output format.',
-    default="plain",
-    type=click.Choice(available_formats()),
-    callback=formatter_from_formatter_name,
-    show_default=True,
-)
-@click.option(
-    '--cols', '-c',
-    help='Which columns should be printed? Pass empty string (-c '') to show all columns',
-    default="result,validations",
-    show_default=True,
-)
-@pass_{{ service }}
 def create({{ service }}: {{ service_facade }}, **kwargs):
     """
     Create a new {{ vars.click_command }}
@@ -117,29 +102,7 @@ def create({{ service }}: {{ service_facade }}, **kwargs):
 
     result = {{ service }}.create_{{ vars.click_command }}(json_payload)
 
-    CliOutputFormatter(result, kwargs['output'], kwargs['cols'].split(",")).echo()
 
-
-@{{ vars.click_command }}.command()
-@click.argument('uuid')
-{% for option in vars.click_options_update -%}
-    {{ option }}
-{% endfor %}
-@click.option(
-    '--output', '-o',
-    help='Specifies the Output format.',
-    default="plain",
-    type=click.Choice(available_formats()),
-    callback=formatter_from_formatter_name,
-    show_default=True,
-)
-@click.option(
-    '--cols', '-c',
-    help='Which columns should be printed? Pass empty string (-c '') to show all columns',
-    default="result,validations",
-    show_default=True,
-)
-@pass_{{ service }}
 def update({{ service }}: {{ service_facade }}, **kwargs):
     """
     Update a {{ vars.click_command }}.
@@ -154,30 +117,9 @@ def update({{ service }}: {{ service_facade }}, **kwargs):
 
     result = {{ service }}.update_{{ vars.click_command }}(kwargs['uuid'], json_payload)
 
-    CliOutputFormatter(result, kwargs['output'], kwargs['cols'].split(",")).echo()
 
-
-@{{ vars.click_command }}.command()
-@click.argument('uuid')
-@click.option(
-    '--output', '-o',
-    help='Specifies the Output format.',
-    default="plain",
-    type=click.Choice(available_formats()),
-    callback=formatter_from_formatter_name,
-    show_default=True,
-)
-@click.option(
-    '--cols', '-c',
-    help='Which columns should be printed? Pass empty string (-c '') to show all columns',
-    default="result,validations",
-    show_default=True,
-)
-@pass_{{ service }}
 def delete({{ service }}: {{ service_facade }}, **kwargs):
     """
     Delete {{ vars.click_command }}
     """
     result = {{ service }}.delete_{{ vars.click_command }}(kwargs['uuid'])
-
-    CliOutputFormatter(result, kwargs['output'], kwargs['cols'].split(",")).echo()
