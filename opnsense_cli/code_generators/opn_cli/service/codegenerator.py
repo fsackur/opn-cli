@@ -5,9 +5,9 @@ from bs4.element import Tag
 
 
 class ClickCommandServiceCodeGenerator(CommandCodeGenerator):
-    def __init__(self, controllers, *args, **kwargs):
+    def __init__(self, controller, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._controllers = controllers
+        self._controller = controller
 
     def _get_template_vars(self):
         resolver_map = {}
@@ -27,7 +27,7 @@ class ClickCommandServiceCodeGenerator(CommandCodeGenerator):
 
         return CommandServiceTemplateVars(
             get_methods = get_methods,
-            controllers = self._controllers,
+            controller = self._controller,
             click_command=self._click_command,
             click_group=self._click_group,
             model_xml_tag=self._model_xml_tag,

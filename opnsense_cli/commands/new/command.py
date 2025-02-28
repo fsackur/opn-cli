@@ -254,21 +254,23 @@ def write_command(type, model_tag: Tag, template_engine, option_factory, **kwarg
 
 
 def write_command_service(type, model_tag: Tag, template_engine, option_factory, **kwargs):
-    command_type = "core"
-    import_name = f"opnsense_cli.api.{command_type}.{kwargs["click_group"]}"
-    module = importlib.import_module(import_name)
-    test_api_base = lambda cls: inspect.isclass(cls) and ApiBase in cls.__mro__
-    members = inspect.getmembers(module, test_api_base)
-    controllers = [(f"{name.lower()}_api", cls) for name, cls in members]
+    import_name = f"opnsense_cli.api.{type}.{kwargs["click_group"]}"
+    api_module = importlib.import_module(import_name)
+    subcommand = kwargs["opn_cli"]
+    controller = next(
+        cls for name, cls
+        in inspect.getmembers(api_module)
+        if name.lower() == subcommand.lower()
+    )
 
     command_service_generator = ClickCommandServiceCodeGenerator(
-        controllers,
+        controller,
         model_tag,
         template_engine,
         option_factory,
         kwargs["template_service"],
         kwargs["click_group"],
-        kwargs["opn_cli"],
+        subcommand,
         kwargs["tag"],
         type,
     )

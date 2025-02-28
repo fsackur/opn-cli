@@ -1,9 +1,10 @@
 {% set service = "{g}{c}Service".format(g=vars.click_group.capitalize(), c=vars.click_command.capitalize()) -%}
+{% set param_name = vars.controller.__name__.lower() + "_api" -%}
+{% set prop = "_" + param_name -%}
+{% set methods = vars.get_methods(vars.controller) -%}
 from opnsense_cli.commands.exceptions import CommandException
 from opnsense_cli.commands.service_base import CommandService
-from opnsense_cli.api.{{ vars.module_type }}.{{ vars.click_group }} import (
-{% for _, cls in vars.controllers %}    {{ cls.__name__ }},
-{% endfor %})
+from opnsense_cli.api.{{ vars.module_type }}.{{ vars.click_group }} import {{ vars.controller.__name__ }}
 
 
 class {{ service }}(CommandService):
@@ -16,16 +17,26 @@ class {{ service }}(CommandService):
 
     def __init__(
         self,
-    {% for name, cls in vars.controllers %}    {{ name }}: {{ cls.__name__ }},
-    {% endfor %}):
+        {{ param_name }}: {{ vars.controller.__name__ }},
+    ):
         super().__init__()
         self._complete_model_data_cache = None
-        {% for name, _ in vars.controllers -%}
-        self._{{ name }} = {{ name }}
-        {% endfor %}
-    {% for name, cls in vars.controllers -%}
-    {% for method_name, method in vars.get_methods(cls) -%}
-    def {{ cls.__name__ | lower }}_{{ method_name }}(self):
-        return self._{{ name }}.{{ method_name }}()
+        self.{{ prop }} = {{ param_name }}
 
-    {% endfor %}{% endfor -%}
+    {% for method_name, method in methods if method_name != "reconfigure" -%}
+    def {{ method_name }}(self, *args, **kwargs):
+        result = self.{{ prop }}.{{ method_name }}(*args, **kwargs)
+        self._apply(result)
+        return result
+
+    {% endfor -%}
+    def _apply(self, result_admin_action):
+        if result_admin_action['result'] not in ['saved', 'deleted']:
+            raise CommandException(result_admin_action)
+        {%- if "reconfigure" in vars.controller.__dict__ %}
+
+        result_apply = self.{{ prop }}.reconfigure()
+
+        if result_apply['status'] != 'ok':
+            raise CommandException(f"Apply failed: {result_apply}")
+        {%- endif -%}
