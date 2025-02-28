@@ -587,4 +587,3 @@ class Traffic(ApiBase):
     def stream(self, *args):
         self.method = "get"
         self.command = "stream"
-

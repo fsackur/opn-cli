@@ -1,5 +1,8 @@
 import click
+import importlib
+import inspect
 import os
+from opnsense_cli.api.base import ApiBase
 from opnsense_cli.commands.new import new
 from opnsense_cli.code_generators.opn_cli.service.codegenerator import ClickCommandServiceCodeGenerator
 from opnsense_cli.code_generators.opn_cli.unit_test.codegenerator import ClickCommandTestCodeGenerator
@@ -251,7 +254,15 @@ def write_command(type, model_tag: Tag, template_engine, option_factory, **kwarg
 
 
 def write_command_service(type, model_tag: Tag, template_engine, option_factory, **kwargs):
+    command_type = "core"
+    import_name = f"opnsense_cli.api.{command_type}.{kwargs["click_group"]}"
+    module = importlib.import_module(import_name)
+    test_api_base = lambda cls: inspect.isclass(cls) and ApiBase in cls.__mro__
+    members = inspect.getmembers(module, test_api_base)
+    controllers = [(f"{name.lower()}_api", cls) for name, cls in members]
+
     command_service_generator = ClickCommandServiceCodeGenerator(
+        controllers,
         model_tag,
         template_engine,
         option_factory,
@@ -282,7 +293,7 @@ def write_command_test(type, model_tag: Tag, template_engine, option_factory, **
         f"{kwargs['command_output_dir']}/{kwargs['click_group']}/tests/test_{kwargs['click_group']}_{kwargs['opn_cli']}.py"
     )
 
-    click.echo(command_test_generator.write_code(output_path))
+    # click.echo(command_test_generator.write_code(output_path))
 
 
 if __name__ == "__main__":
