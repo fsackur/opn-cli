@@ -6,7 +6,7 @@ from opnsense_cli.code_generators.opn_cli.unit_test.codegenerator import ClickCo
 from opnsense_cli.parser.opnsense_form_parser import OpnsenseFormParser
 from opnsense_cli.parser.opnsense_model_parser import OpnsenseModelParser
 from opnsense_cli.code_generators.opn_cli.factories import ClickOptionCodeTypeFactory
-from opnsense_cli.code_generators.opn_cli.command.codegenerator import ClickCommandCodeGenerator
+from opnsense_cli.code_generators.opn_cli.command.codegenerator import ClickCommandCodeGenerator, ClickCommandInitGenerator
 from opnsense_cli.template_engines.jinja2 import Jinja2TemplateEngine
 from bs4.element import Tag
 
@@ -219,15 +219,24 @@ def generate_command_files(type, **kwargs):
 
 
 def write_command(type, model_tag: Tag, template_engine, option_factory, **kwargs):
+    template = kwargs["template_command"]
+    init_template = os.path.join(os.path.dirname(template), f"init.{os.path.basename(template)}")
+
     command_code_generator = ClickCommandCodeGenerator(
         model_tag,
         template_engine,
         option_factory,
-        kwargs["template_command"],
+        template,
         kwargs["click_group"],
         kwargs["opn_cli"],
         kwargs["tag"],
         type,
+    )
+
+    init_generator = ClickCommandInitGenerator(
+        template_engine,
+        init_template,
+        kwargs["click_group"],
     )
 
     if kwargs["form_url"]:
@@ -235,8 +244,10 @@ def write_command(type, model_tag: Tag, template_engine, option_factory, **kwarg
         command_code_generator.help_messages = form_parser.parse()
 
     output_path = f"{kwargs['command_output_dir']}/{kwargs['click_group']}/{kwargs['opn_cli']}.py"
+    init_path = f"{kwargs['command_output_dir']}/{kwargs['click_group']}/__init__.py"
 
     click.echo(command_code_generator.write_code(output_path))
+    click.echo(init_generator.write_code(init_path))
 
 
 def write_command_service(type, model_tag: Tag, template_engine, option_factory, **kwargs):

@@ -1,7 +1,19 @@
-from opnsense_cli.code_generators.opn_cli.base import CommandCodeGenerator
+from opnsense_cli.code_generators.opn_cli.base import CodeGenerator, CommandCodeGenerator
 from opnsense_cli.code_generators.opn_cli.factory_types import ClickOptionCodeFragment, ClickText
-from opnsense_cli.code_generators.opn_cli.command.template_vars import CommandTemplateVars
+from opnsense_cli.code_generators.opn_cli.command.template_vars import CommandTemplateVars, CommandInitTemplateVars
 from opnsense_cli.factories import FactoryException
+from opnsense_cli.template_engines.base import TemplateEngine
+
+
+class ClickCommandInitGenerator(CodeGenerator):
+    def __init__(self, template_engine: TemplateEngine, template, group):
+        super().__init__()
+        self._template_engine = template_engine
+        self._template = template
+        self._click_group = group
+
+    def _get_template_vars(self):
+        return CommandInitTemplateVars(click_group=self._click_group)
 
 
 class ClickCommandCodeGenerator(CommandCodeGenerator):

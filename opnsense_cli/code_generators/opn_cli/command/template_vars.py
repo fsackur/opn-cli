@@ -10,3 +10,8 @@ class CommandTemplateVars:
     column_names: list
     column_list: str
     module_type: str
+
+
+@dataclass
+class CommandInitTemplateVars:
+    click_group: str
