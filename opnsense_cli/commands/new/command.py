@@ -211,6 +211,16 @@ def plugin(**kwargs):
     generate_command_files("plugin", **kwargs)
 
 
+def get_controller(type: str, click_group: str, subcommand: str):
+    import_name = f"opnsense_cli.api.{type}.{click_group}"
+    api_module = importlib.import_module(import_name)
+    return next(
+        cls for name, cls
+        in inspect.getmembers(api_module)
+        if name.lower() == subcommand.lower()
+    )
+
+
 def generate_command_files(type, **kwargs):
     model_tag = OpnsenseModelParser(kwargs["model_url"], kwargs["tag"]).parse()
     template_engine = Jinja2TemplateEngine(kwargs["template_basedir"])
@@ -225,7 +235,10 @@ def write_command(type, model_tag: Tag, template_engine, option_factory, **kwarg
     template = kwargs["template_command"]
     init_template = os.path.join(os.path.dirname(template), f"init.{os.path.basename(template)}")
 
+    controller = get_controller(type, kwargs["click_group"], kwargs["opn_cli"])
+
     command_code_generator = ClickCommandCodeGenerator(
+        controller,
         model_tag,
         template_engine,
         option_factory,
@@ -254,14 +267,7 @@ def write_command(type, model_tag: Tag, template_engine, option_factory, **kwarg
 
 
 def write_command_service(type, model_tag: Tag, template_engine, option_factory, **kwargs):
-    import_name = f"opnsense_cli.api.{type}.{kwargs["click_group"]}"
-    api_module = importlib.import_module(import_name)
-    subcommand = kwargs["opn_cli"]
-    controller = next(
-        cls for name, cls
-        in inspect.getmembers(api_module)
-        if name.lower() == subcommand.lower()
-    )
+    controller = get_controller(type, kwargs["click_group"], kwargs["opn_cli"])
 
     command_service_generator = ClickCommandServiceCodeGenerator(
         controller,
@@ -270,7 +276,7 @@ def write_command_service(type, model_tag: Tag, template_engine, option_factory,
         option_factory,
         kwargs["template_service"],
         kwargs["click_group"],
-        subcommand,
+        kwargs["opn_cli"],
         kwargs["tag"],
         type,
     )

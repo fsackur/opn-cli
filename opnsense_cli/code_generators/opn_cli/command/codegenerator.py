@@ -1,4 +1,4 @@
-from opnsense_cli.code_generators.opn_cli.base import CodeGenerator, CommandCodeGenerator
+from opnsense_cli.code_generators.opn_cli.base import CodeGenerator, CommandCodeGenerator, get_methods
 from opnsense_cli.code_generators.opn_cli.factory_types import ClickOptionCodeFragment, ClickText
 from opnsense_cli.code_generators.opn_cli.command.template_vars import CommandTemplateVars, CommandInitTemplateVars
 from opnsense_cli.factories import FactoryException
@@ -20,8 +20,9 @@ class ClickCommandCodeGenerator(CommandCodeGenerator):
     IGNORED_TYPES = ["UniqueIdField"]
     IGNORED_TAG_NAMES_CREATE = ["name"]
 
-    def __init__(self, *args):
+    def __init__(self, controller, *args):
         super().__init__(*args)
+        self._controller = controller
         self.__help_messages = None
 
     @property
@@ -62,6 +63,8 @@ class ClickCommandCodeGenerator(CommandCodeGenerator):
                 click_options_update.append(update_option_code)
 
         return CommandTemplateVars(
+            get_methods=get_methods,
+            controller=self._controller,
             click_command=self._click_command,
             click_group=self._click_group,
             click_options_create=click_options_create,

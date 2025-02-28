@@ -1,8 +1,18 @@
 from bs4 import Tag
+from typing import Callable, List, Tuple, Type
 
 from opnsense_cli.code_generators.base import CodeGenerator
 from opnsense_cli.template_engines.base import TemplateEngine
 from opnsense_cli.factories import ObjectTypeFromDataFactory
+
+
+def get_methods(cls: Type) -> List[Tuple[str, Callable]]:
+    import inspect
+    return [
+        (name, f) for name, f
+        in inspect.getmembers(cls, inspect.isfunction)
+        if name not in ("__init__", "_api_call")
+    ]
 
 
 class CommandCodeGenerator(CodeGenerator):

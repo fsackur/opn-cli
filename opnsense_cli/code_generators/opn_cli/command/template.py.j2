@@ -1,5 +1,6 @@
 {% set service_facade = "{g}{c}Service".format(g=vars.click_group.capitalize(), c=vars.click_command.capitalize()) -%}
 {% set service = "{g}_{c}_svc".format(g=vars.click_group, c=vars.click_command) -%}
+{% set param_name = vars.controller.__name__.lower() + "_api" -%}
 
 import click
 from opnsense_cli.formatters.cli_output.cli_output_formatter import CliOutputFormatter
@@ -10,7 +11,7 @@ from opnsense_cli.click_addons.param_type_int_or_empty import INT_OR_EMPTY
 from opnsense_cli.click_addons.param_type_csv import CSV
 from opnsense_cli.commands.{{ vars.module_type }}.{{ vars.click_group }} import {{ vars.click_group }}
 from opnsense_cli.api.client import ApiClient
-from opnsense_cli.api.{{ vars.module_type }}.{{ vars.click_group }} import Settings, Service
+from opnsense_cli.api.{{ vars.module_type }}.{{ vars.click_group }} import {{ vars.controller.__name__ }}
 from opnsense_cli.commands.{{ vars.module_type }}.{{ vars.click_group }}.services.{{ vars.click_group }}_{{ vars.click_command }}_service import {{ service_facade }}
 
 pass_api_client = click.make_pass_decorator(ApiClient)
@@ -24,9 +25,8 @@ def {{ vars.click_command }}(ctx, api_client: ApiClient, **kwargs):
     """
     Manage {{ vars.click_group }} {{ vars.click_command }}
     """
-    settings_api = Settings(api_client)
-    service_api = Service(api_client)
-    ctx.obj = {{ service_facade }}(settings_api, service_api)
+    {{ param_name }} = {{ vars.controller.__name__ }}(api_client)
+    ctx.obj = {{ service_facade }}({{ param_name }})
 
 
 @{{ vars.click_command }}.command()

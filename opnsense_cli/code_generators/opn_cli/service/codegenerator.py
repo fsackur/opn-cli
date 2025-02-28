@@ -1,5 +1,4 @@
-from typing import Callable, List, Tuple, Type
-from opnsense_cli.code_generators.opn_cli.base import CommandCodeGenerator
+from opnsense_cli.code_generators.opn_cli.base import CommandCodeGenerator, get_methods
 from opnsense_cli.code_generators.opn_cli.service.template_vars import CommandServiceTemplateVars
 from bs4.element import Tag
 
@@ -16,14 +15,6 @@ class ClickCommandServiceCodeGenerator(CommandCodeGenerator):
 
             if resolver_item:
                 resolver_map.update(resolver_item)
-
-        def get_methods(cls: Type) -> List[Tuple[str, Callable]]:
-            import inspect
-            return [
-                (name, f) for name, f
-                in inspect.getmembers(cls, inspect.isfunction)
-                if name not in ("__init__", "_api_call")
-            ]
 
         return CommandServiceTemplateVars(
             get_methods = get_methods,
