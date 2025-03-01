@@ -25,6 +25,7 @@ class ApiBase:
     def command(self, value):
         self._command = value
 
+    @staticmethod
     def _api_call(api_function):
         def api_response(self, *args, json=None):
             api_function(self)
@@ -34,6 +35,7 @@ class ApiBase:
 
         return api_response
 
+    @staticmethod
     def get(api_function):
         def api_response(self, *args, json=None):
             self.method = "get"
@@ -44,6 +46,7 @@ class ApiBase:
 
         return api_response
 
+    @staticmethod
     def post(api_function):
         def api_response(self, *args, json=None):
             self.method = "post"

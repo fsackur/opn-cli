@@ -8,9 +8,16 @@ class {{ controller.capitalize() }}(ApiBase):
     {{ vars.module_name.capitalize() }} {{ controller.capitalize() }}Controller
     """
 {% for controller_value in controller_values %}
-    @ApiBase._api_call
-    def {{ controller_value['command'] }}(self, *args):
-        self.method = "{{ controller_value['method'].lower() }}"
+    @ApiBase.{{ controller_value['method'].lower() }}
+    def {{ controller_value['command'] }}(self
+    {%- for param in controller_value["parameters"] | selectattr("required", "==", True) -%}
+    , {{ param.name }}
+    {%- endfor -%}
+    , *args
+    {%- for param in controller_value["parameters"] | selectattr("required", "==", False) -%}
+    , {{ param.name }}={{ param.default }}
+    {%- endfor -%}
+    ):
         self.command = "{{ controller_value['command'] }}"
 {% endfor %}
 {% endfor %}

@@ -8,9 +8,8 @@ class Activity(ApiBase):
     Diagnostics ActivityController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getActivity(self, *args):
-        self.method = "get"
         self.command = "getActivity"
 
 
@@ -21,14 +20,12 @@ class Cpu_usage(ApiBase):
     Diagnostics Cpu_usageController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getCPUType(self, *args):
-        self.method = "get"
         self.command = "getCPUType"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def stream(self, *args):
-        self.method = "get"
         self.command = "stream"
 
 
@@ -39,9 +36,8 @@ class Dns(ApiBase):
     Diagnostics DnsController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def reverseLookup(self, *args):
-        self.method = "get"
         self.command = "reverseLookup"
 
 
@@ -52,19 +48,16 @@ class Dns_diagnostics(ApiBase):
     Diagnostics Dns_diagnosticsController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def get(self, *args):
-        self.method = "get"
         self.command = "get"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def set(self, *args):
-        self.method = "get"
         self.command = "set"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def set(self, *args):
-        self.method = "post"
         self.command = "set"
 
 
@@ -75,69 +68,56 @@ class Firewall(ApiBase):
     Diagnostics FirewallController
     """
 
-    @ApiBase._api_call
-    def delState(self, *args):
-        self.method = "post"
+    @ApiBase.post
+    def delState(self, stateid, creatorid, *args):
         self.command = "delState"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def flushSources(self, *args):
-        self.method = "post"
         self.command = "flushSources"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def flushStates(self, *args):
-        self.method = "post"
         self.command = "flushStates"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def killStates(self, *args):
-        self.method = "post"
         self.command = "killStates"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def listRuleIds(self, *args):
-        self.method = "get"
         self.command = "listRuleIds"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def log(self, *args):
-        self.method = "get"
         self.command = "log"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def logFilters(self, *args):
-        self.method = "get"
         self.command = "logFilters"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def pfStates(self, *args):
-        self.method = "get"
         self.command = "pfStates"
 
-    @ApiBase._api_call
-    def pfStatistics(self, *args):
-        self.method = "get"
+    @ApiBase.get
+    def pfStatistics(self, *args, section=None):
         self.command = "pfStatistics"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def queryPfTop(self, *args):
-        self.method = "post"
         self.command = "queryPfTop"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def queryStates(self, *args):
-        self.method = "post"
         self.command = "queryStates"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def stats(self, *args):
-        self.method = "get"
         self.command = "stats"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def streamLog(self, *args):
-        self.method = "get"
         self.command = "streamLog"
 
 
@@ -148,94 +128,76 @@ class Interface(ApiBase):
     Diagnostics InterfaceController
     """
 
-    @ApiBase._api_call
-    def CarpStatus(self, *args):
-        self.method = "post"
+    @ApiBase.post
+    def CarpStatus(self, status, *args):
         self.command = "CarpStatus"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def delRoute(self, *args):
-        self.method = "post"
         self.command = "delRoute"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def flushArp(self, *args):
-        self.method = "post"
         self.command = "flushArp"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getArp(self, *args):
-        self.method = "get"
         self.command = "getArp"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getBpfStatistics(self, *args):
-        self.method = "get"
         self.command = "getBpfStatistics"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getInterfaceConfig(self, *args):
-        self.method = "get"
         self.command = "getInterfaceConfig"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getInterfaceNames(self, *args):
-        self.method = "get"
         self.command = "getInterfaceNames"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getInterfaceStatistics(self, *args):
-        self.method = "get"
         self.command = "getInterfaceStatistics"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getMemoryStatistics(self, *args):
-        self.method = "get"
         self.command = "getMemoryStatistics"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getNdp(self, *args):
-        self.method = "get"
         self.command = "getNdp"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getNetisrStatistics(self, *args):
-        self.method = "get"
         self.command = "getNetisrStatistics"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getPfsyncNodes(self, *args):
-        self.method = "get"
         self.command = "getPfsyncNodes"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getProtocolStatistics(self, *args):
-        self.method = "get"
         self.command = "getProtocolStatistics"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getRoutes(self, *args):
-        self.method = "get"
         self.command = "getRoutes"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getSocketStatistics(self, *args):
-        self.method = "get"
         self.command = "getSocketStatistics"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getVipStatus(self, *args):
-        self.method = "get"
         self.command = "getVipStatus"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def searchArp(self, *args):
-        self.method = "get"
         self.command = "searchArp"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def searchNdp(self, *args):
-        self.method = "get"
         self.command = "searchNdp"
 
 
@@ -246,39 +208,32 @@ class Lvtemplate(ApiBase):
     Diagnostics LvtemplateController
     """
 
-    @ApiBase._api_call
+    @ApiBase.post
     def addItem(self, *args):
-        self.method = "post"
         self.command = "addItem"
 
-    @ApiBase._api_call
-    def delItem(self, *args):
-        self.method = "post"
+    @ApiBase.post
+    def delItem(self, uuid, *args):
         self.command = "delItem"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def get(self, *args):
-        self.method = "get"
         self.command = "get"
 
-    @ApiBase._api_call
-    def getItem(self, *args):
-        self.method = "get"
+    @ApiBase.get
+    def getItem(self, *args, uuid=None):
         self.command = "getItem"
 
-    @ApiBase._api_call
+    @ApiBase.*
     def searchItem(self, *args):
-        self.method = "*"
         self.command = "searchItem"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def set(self, *args):
-        self.method = "post"
         self.command = "set"
 
-    @ApiBase._api_call
-    def setItem(self, *args):
-        self.method = "post"
+    @ApiBase.post
+    def setItem(self, uuid, *args):
         self.command = "setItem"
 
 
@@ -289,34 +244,28 @@ class Netflow(ApiBase):
     Diagnostics NetflowController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def cacheStats(self, *args):
-        self.method = "get"
         self.command = "cacheStats"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getconfig(self, *args):
-        self.method = "get"
         self.command = "getconfig"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def isEnabled(self, *args):
-        self.method = "get"
         self.command = "isEnabled"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def reconfigure(self, *args):
-        self.method = "post"
         self.command = "reconfigure"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def setconfig(self, *args):
-        self.method = "get"
         self.command = "setconfig"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def status(self, *args):
-        self.method = "get"
         self.command = "status"
 
 
@@ -327,24 +276,20 @@ class Networkinsight(ApiBase):
     Diagnostics NetworkinsightController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getInterfaces(self, *args):
-        self.method = "get"
         self.command = "getInterfaces"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getMetadata(self, *args):
-        self.method = "get"
         self.command = "getMetadata"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getProtocols(self, *args):
-        self.method = "get"
         self.command = "getProtocols"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getServices(self, *args):
-        self.method = "get"
         self.command = "getServices"
 
 
@@ -355,54 +300,44 @@ class Packet_capture(ApiBase):
     Diagnostics Packet_captureController
     """
 
-    @ApiBase._api_call
-    def download(self, *args):
-        self.method = "get"
+    @ApiBase.get
+    def download(self, jobid, *args):
         self.command = "download"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def get(self, *args):
-        self.method = "get"
         self.command = "get"
 
-    @ApiBase._api_call
-    def macInfo(self, *args):
-        self.method = "get"
+    @ApiBase.get
+    def macInfo(self, macaddr, *args):
         self.command = "macInfo"
 
-    @ApiBase._api_call
-    def remove(self, *args):
-        self.method = "post"
+    @ApiBase.post
+    def remove(self, jobid, *args):
         self.command = "remove"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def searchJobs(self, *args):
-        self.method = "get"
         self.command = "searchJobs"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def set(self, *args):
-        self.method = "get"
         self.command = "set"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def set(self, *args):
-        self.method = "post"
         self.command = "set"
 
-    @ApiBase._api_call
-    def start(self, *args):
-        self.method = "post"
+    @ApiBase.post
+    def start(self, jobid, *args):
         self.command = "start"
 
-    @ApiBase._api_call
-    def stop(self, *args):
-        self.method = "post"
+    @ApiBase.post
+    def stop(self, jobid, *args):
         self.command = "stop"
 
-    @ApiBase._api_call
-    def view(self, *args):
-        self.method = "get"
+    @ApiBase.get
+    def view(self, jobid, *args, detail='normal'):
         self.command = "view"
 
 
@@ -415,37 +350,30 @@ class Ping(ApiBase):
 
     @ApiBase.get
     def get(self, *args):
-        self.method = "get"
         self.command = "get"
 
-    @ApiBase._api_call
-    def remove(self, *args):
-        self.method = "post"
+    @ApiBase.post
+    def remove(self, jobid, *args):
         self.command = "remove"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def searchJobs(self, *args):
-        self.method = "get"
         self.command = "searchJobs"
 
     @ApiBase.get
     def set(self, *args):
-        self.method = "get"
         self.command = "set"
 
     @ApiBase.post
     def set(self, *args):
-        self.method = "post"
         self.command = "set"
 
-    @ApiBase._api_call
-    def start(self, *args):
-        self.method = "post"
+    @ApiBase.post
+    def start(self, jobid, *args):
         self.command = "start"
 
-    @ApiBase._api_call
-    def stop(self, *args):
-        self.method = "post"
+    @ApiBase.post
+    def stop(self, jobid, *args):
         self.command = "stop"
 
 
@@ -456,19 +384,16 @@ class Portprobe(ApiBase):
     Diagnostics PortprobeController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def get(self, *args):
-        self.method = "get"
         self.command = "get"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def set(self, *args):
-        self.method = "get"
         self.command = "set"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def set(self, *args):
-        self.method = "post"
         self.command = "set"
 
 
@@ -479,44 +404,36 @@ class System(ApiBase):
     Diagnostics SystemController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def memory(self, *args):
-        self.method = "get"
         self.command = "memory"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def systemDisk(self, *args):
-        self.method = "get"
         self.command = "systemDisk"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def systemInformation(self, *args):
-        self.method = "get"
         self.command = "systemInformation"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def systemMbuf(self, *args):
-        self.method = "get"
         self.command = "systemMbuf"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def systemResources(self, *args):
-        self.method = "get"
         self.command = "systemResources"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def systemSwap(self, *args):
-        self.method = "get"
         self.command = "systemSwap"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def systemTemperature(self, *args):
-        self.method = "get"
         self.command = "systemTemperature"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def systemTime(self, *args):
-        self.method = "get"
         self.command = "systemTime"
 
 
@@ -527,19 +444,16 @@ class Systemhealth(ApiBase):
     Diagnostics SystemhealthController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getInterfaces(self, *args):
-        self.method = "get"
         self.command = "getInterfaces"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def getRRDlist(self, *args):
-        self.method = "get"
         self.command = "getRRDlist"
 
-    @ApiBase._api_call
-    def getSystemHealth(self, *args):
-        self.method = "get"
+    @ApiBase.get
+    def getSystemHealth(self, *args, rrd="", inverse=0, detail=-1):
         self.command = "getSystemHealth"
 
 
@@ -550,19 +464,16 @@ class Traceroute(ApiBase):
     Diagnostics TracerouteController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def get(self, *args):
-        self.method = "get"
         self.command = "get"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def set(self, *args):
-        self.method = "get"
         self.command = "set"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def set(self, *args):
-        self.method = "post"
         self.command = "set"
 
 
@@ -573,17 +484,15 @@ class Traffic(ApiBase):
     Diagnostics TrafficController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def Interface(self, *args):
-        self.method = "get"
         self.command = "Interface"
 
-    @ApiBase._api_call
-    def Top(self, *args):
-        self.method = "get"
+    @ApiBase.get
+    def Top(self, interfaces, *args):
         self.command = "Top"
 
-    @ApiBase._api_call
-    def stream(self, *args):
-        self.method = "get"
+    @ApiBase.get
+    def stream(self, *args, poll_interval=1):
         self.command = "stream"
+

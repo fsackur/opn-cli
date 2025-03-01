@@ -1,6 +1,16 @@
 from bs4 import BeautifulSoup
+from dataclasses import dataclass
+import re
 import requests
+from typing import Any
 from opnsense_cli.parser.html_parser import HtmlParser
+
+
+@dataclass
+class Parameter:
+    name: str
+    required: bool
+    default: Any
 
 
 class OpnsenseApiReferenceParser(HtmlParser):
@@ -52,9 +62,25 @@ class OpnsenseApiReferenceParser(HtmlParser):
         api_endpoint["module"] = row_content[1].get_text(strip=True)
         api_endpoint["controller"] = row_content[2].get_text(strip=True)
         api_endpoint["command"] = row_content[3].get_text(strip=True)
-        parameters = row_content[4].get_text(strip=True)
-        if parameters:
-            api_endpoint["parameters"] = self._get_parameters(parameters)
+        param_str = row_content[4].get_text(strip=True)
+        param_strs = param_str.split(",") if param_str else []
+        param_strs = [re.sub(r"^\$", "", p) for p in param_strs]
+        parameters = []
+        for param in param_strs:
+            if "=" in param:
+                param, default = param.split("=", 2)
+                parameters.append(Parameter(
+                    name=param,
+                    required=False,
+                    default=None if default == "null" else default
+                ))
+            else:
+                parameters.append(Parameter(
+                    name=param,
+                    required=True,
+                    default=None
+                ))
+        api_endpoint["parameters"] = parameters
         return api_endpoint
 
     def _get_api_endpoints(self, tables):
