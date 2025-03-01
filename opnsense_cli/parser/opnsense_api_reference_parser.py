@@ -53,12 +53,8 @@ class OpnsenseApiReferenceParser(HtmlParser):
         api_endpoint["controller"] = row_content[2].get_text(strip=True)
         api_endpoint["command"] = row_content[3].get_text(strip=True)
         parameters = row_content[4].get_text(strip=True)
-        api_endpoint["parameters"] = parameters.split(",") if parameters else []
-        # if parameters:
-        #     api_endpoint["parameters"] = self._get_parameters(parameters)
-        # elif api_endpoint["method"].lower() == "post":
-        #     # parameterless post - assume create
-        #     pass
+        if parameters:
+            api_endpoint["parameters"] = self._get_parameters(parameters)
         return api_endpoint
 
     def _get_api_endpoints(self, tables):

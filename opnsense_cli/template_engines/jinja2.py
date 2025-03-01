@@ -1,14 +1,8 @@
-import re
 import os
 from jinja2 import Template, Environment, BaseLoader
 from opnsense_cli.template_engines.base import TemplateEngine
 from opnsense_cli.template_engines.exceptions import TemplateNotFoundException
 from jinja2.exceptions import TemplateNotFound, TemplatesNotFound
-
-
-# Custom filter method
-def regex_replace(s, find, replace):
-    return re.sub(find, replace, s)
 
 
 class Jinja2TemplateEngine(TemplateEngine):
@@ -23,9 +17,7 @@ class Jinja2TemplateEngine(TemplateEngine):
             raise TemplateNotFoundException(template_path)
 
     def set_template_from_string(self, template_str, **kwargs) -> Template:
-        env = Environment(loader=BaseLoader, **kwargs)
-        env.filters["regex_replace"] = regex_replace
-        self.template = env.from_string(template_str)
+        self.template = Environment(loader=BaseLoader, **kwargs).from_string(template_str)
 
     def render(self):
         return self.template.render(vars=self.vars)
