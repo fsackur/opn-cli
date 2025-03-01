@@ -80,7 +80,7 @@ class ClickBoolean(ClickOptionCodeFragment):
     TEMPLATE_CREATE = """
     @click.option(
         '--${name}/--no-${name}',
-        help=('${help}'),
+        help=('''${help}'''),
         show_default=True,
         is_flag=True,
         callback=bool_as_string,
@@ -91,7 +91,7 @@ class ClickBoolean(ClickOptionCodeFragment):
     TEMPLATE_UPDATE = """
     @click.option(
         '--${name}/--no-${name}',
-        help=('${help}'),
+        help=('''${help}'''),
         show_default=True,
         is_flag=True,
         callback=bool_as_string,
@@ -118,7 +118,7 @@ class ClickChoice(ClickOptionCodeFragment):
     TEMPLATE_CREATE = """
     @click.option(
         '--${name}',
-        help=('${help}'),
+        help=('''${help}'''),
         type=click.Choice(${choices}),
         multiple=${multiple},
         callback=tuple_to_csv,
@@ -130,7 +130,7 @@ class ClickChoice(ClickOptionCodeFragment):
     TEMPLATE_UPDATE = """
     @click.option(
         '--${name}',
-        help=('${help}'),
+        help=('''${help}'''),
         type=click.Choice(${choices}),
         multiple=${multiple},
         callback=tuple_to_csv,
@@ -184,7 +184,7 @@ class ClickInteger(ClickOptionCodeFragment):
     TEMPLATE_CREATE = """
     @click.option(
         '--${name}',
-        help=('${help}'),
+        help=('''${help}'''),
         show_default=True,
         type=INT_OR_EMPTY,
         callback=int_as_string,
@@ -195,7 +195,7 @@ class ClickInteger(ClickOptionCodeFragment):
     TEMPLATE_UPDATE = """
     @click.option(
         '--${name}',
-        help=('${help}'),
+        help=('''${help}'''),
         show_default=True,
         type=INT_OR_EMPTY,
         callback=int_as_string,
@@ -216,7 +216,7 @@ class ClickText(ClickOptionCodeFragment):
     TEMPLATE_CREATE = """
     @click.option(
         '--${name}',
-        help=('${help}'),
+        help=('''${help}'''),
         show_default=True,
         default=${default},
         ${required}
@@ -225,7 +225,7 @@ class ClickText(ClickOptionCodeFragment):
     TEMPLATE_UPDATE = """
     @click.option(
         '--${name}',
-        help=('${help}'),
+        help=('''${help}'''),
         show_default=True,
         default=None
     )
@@ -244,7 +244,7 @@ class ClickTextLinkedItem(ClickOptionCodeFragment):
     TEMPLATE_CREATE = """
     @click.option(
         '--${name}',
-        help=('${help}'),
+        help=('''${help}'''),
         callback=resolve_linked_names_to_uuids,
         type=CSV,
         show_default=True,
@@ -255,7 +255,7 @@ class ClickTextLinkedItem(ClickOptionCodeFragment):
     TEMPLATE_UPDATE = """
     @click.option(
         '--${name}',
-        help=('${help}'),
+        help=('''${help}'''),
         callback=resolve_linked_names_to_uuids,
         type=CSV,
         show_default=True,
