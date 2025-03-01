@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import click
-
+import opnsense_cli  # fix circular import in autoloader, allowing `python -m opnsense_cli.cli foo bar`
 
 from opnsense_cli.click_addons.callbacks import defaults_from_configfile, expand_path, get_default_config_dir
 from opnsense_cli.api.client import ApiClient
