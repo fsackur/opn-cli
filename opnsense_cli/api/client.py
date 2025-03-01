@@ -40,6 +40,7 @@ class ApiClient:
 
     def _get_endpoint_url(self, *args, **kwargs):
         endpoint = f"{kwargs['module']}/{kwargs['controller']}/{kwargs['command']}".lower()
+        # print(args)
         endpoint_params = "/".join(args)
         if endpoint_params:
             return f"{endpoint}/{endpoint_params}"

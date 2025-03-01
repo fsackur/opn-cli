@@ -33,7 +33,7 @@ def {{ vars.click_command }}(ctx, api_client: ApiClient, **kwargs):
 @{{ vars.click_command }}.command()
 {% for option in vars.click_options_create -%}
     {{ option }}
-{% endfor %}
+{% endfor -%}
 @click.option(
     '--output', '-o',
     help='Specifies the Output format.',
@@ -46,7 +46,7 @@ def {{ vars.click_command }}(ctx, api_client: ApiClient, **kwargs):
     '--cols', '-c',
     help='Which columns should be printed? Pass empty string (-c '') to show all columns',
     default=(
-        "uuid,{{ ",".join(vars.column_names) }}"
+        "{{ ",".join(vars.column_names) }}"
     ),
     show_default=True,
 )

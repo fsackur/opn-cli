@@ -33,3 +33,23 @@ class ApiBase:
             )
 
         return api_response
+
+    def get(api_function):
+        def api_response(self, *args, json=None):
+            self.method = "get"
+            api_function(self)
+            return self._api_client.execute(
+                *args, module=self.module, controller=self.controller, method=self.method, command=self.command, json=json
+            )
+
+        return api_response
+
+    def post(api_function):
+        def api_response(self, *args, json=None):
+            self.method = "post"
+            api_function(self)
+            return self._api_client.execute(
+                *args, module=self.module, controller=self.controller, method=self.method, command=self.command, json=json
+            )
+
+        return api_response

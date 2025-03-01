@@ -413,7 +413,7 @@ class Ping(ApiBase):
     Diagnostics PingController
     """
 
-    @ApiBase._api_call
+    @ApiBase.get
     def get(self, *args):
         self.method = "get"
         self.command = "get"
@@ -428,12 +428,12 @@ class Ping(ApiBase):
         self.method = "get"
         self.command = "searchJobs"
 
-    @ApiBase._api_call
+    @ApiBase.get
     def set(self, *args):
         self.method = "get"
         self.command = "set"
 
-    @ApiBase._api_call
+    @ApiBase.post
     def set(self, *args):
         self.method = "post"
         self.command = "set"
@@ -587,4 +587,3 @@ class Traffic(ApiBase):
     def stream(self, *args):
         self.method = "get"
         self.command = "stream"
-

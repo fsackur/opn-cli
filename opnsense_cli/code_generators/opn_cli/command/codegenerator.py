@@ -1,6 +1,6 @@
 from opnsense_cli.code_generators.opn_cli.base import CodeGenerator, CommandCodeGenerator, get_methods, get_parameters
 from opnsense_cli.code_generators.opn_cli.factory_types import ClickOptionCodeFragment, ClickText
-from opnsense_cli.code_generators.opn_cli.command.template_vars import CommandTemplateVars, CommandInitTemplateVars
+from opnsense_cli.code_generators.opn_cli.command.template_vars import CommandTemplateVars, CommandInitTemplateVars, Method
 from opnsense_cli.factories import FactoryException
 from opnsense_cli.template_engines.base import TemplateEngine
 
@@ -35,12 +35,28 @@ class ClickCommandCodeGenerator(CommandCodeGenerator):
     def help_messages(self, messages: dict):
         self.__help_messages = messages
 
+    def _parse_methods(self, controller_cls):
+        import inspect
+        methods = []
+        for name, method in inspect.getmembers(controller_cls, inspect.isfunction):
+            if name in ("__init__", "_api_call"):
+                continue
+            source = inspect.getsource(method)
+            http_method = "post" if 'self.method = "post"' in source else "get"
+            methods.append(Method(
+                name=name,
+                http_method=http_method
+            ))
+        return methods
+
     def _get_template_vars(self):
         click_options_create = []
         click_options_update = []
         column_names = []
 
         for tag in self._tag_content.findChildren(recursive=False):
+            print(tag)
+            print("====================================")
             if tag.attrs.get("type") in self.IGNORED_TYPES:
                 continue
 
@@ -66,6 +82,7 @@ class ClickCommandCodeGenerator(CommandCodeGenerator):
             get_methods=get_methods,
             get_parameters=get_parameters,
             controller=self._controller,
+            methods=self._parse_methods(self._controller),
             click_command=self._click_command,
             click_group=self._click_group,
             click_options_create=click_options_create,
@@ -74,7 +91,9 @@ class ClickCommandCodeGenerator(CommandCodeGenerator):
             column_list=repr(column_names),
             module_type=self._module_type,
         )
+        print("====================================")
         for k, v in vars.__dict__.items(): print(f"{k}: {v}")
+        print("====================================")
         return vars
 
     def _get_click_option_create_code(self, tag, click_option_type: ClickOptionCodeFragment):
